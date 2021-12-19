@@ -9,10 +9,8 @@ require_once("settings/config.php");
   <meta name="description" content="ディスクリプションを入力">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/contact.css">
-  <!-- [if lt IE 9] -->
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
-  <!-- [endif] -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="js/validate.js"></script>
 </head>
 <body>
   <div class="Form">
