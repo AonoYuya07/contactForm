@@ -7,6 +7,7 @@ settings/config.phpにて入力項目等の設定をおこないます。
 
 WordPressの場合は、functions.phpにsettings/config.phpの内容を移してください。
 index.php、confirm.php、thanks.phpは固定ページ等でページ作成を行なってください。
+（完成次第、WordPressへの詳細な設置方法を追記します。）
 
 ファイルのパスや、HTML構造などは使用環境に合わせて適宜変更してください。
 ただし、config.php内で定義しているHTMLコードを変更する場合は、固定で設定しているClass名などにご注意ください。
