@@ -1,5 +1,11 @@
 <?php
 //お問い合わせ設定。設置するフォームの項目設定やinputタグのHTML生成を行う。
+//URL定義。確認画面＆完了画面のURLを定義する
+$confirmUrl = "/confirm.php";
+$thanksUrl = "/thanks.php";
+//管理者メールアドレス
+$adminMail = "test@example.com";
+/*************入力画面HTML生成*************/
 //classやidは各項目の個別のCSS＆JS適用に使用する想定
 /*想定バリデーション-------------------------
 //require：必須
@@ -11,7 +17,6 @@
 //現在の想定は上記です。
 //使用感を見て随時追加します。
 -------------------------------------*/
-
 $formParts = array(
   //氏名
   "name" => array(
@@ -92,6 +97,19 @@ $formParts = array(
     "validateTarget" => "remarks"
   ),
 );
+//メール文面で同じラベルで表示させる項目を定義(設計中)
+$sameLabel = array(
+  "set1" => array(
+    "zip",
+    "pref",
+    "address",
+    "building"
+  ),
+  "set2" => array(
+    "name1",
+    "name2"
+  ),
+);
 //formタグ内のHTMLを生成する
 $inputArr = array();//生成したHTMLを入れる箱
 $html = '<form class="form" form="form1" action="confirm.php" method="post">';
@@ -106,6 +124,7 @@ foreach ($formParts as $inputName => $attr) {
       }else {
         $html .= '<p class="Form-Item-Label">'.$attr['label'].'</p>';
       }
+
       $html .= '<select class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'">';
       foreach ($attr['options'] as $value) {
         if (!empty($_SESSION[$inputName]) && $_SESSION[$inputName] == $value) {
@@ -199,6 +218,7 @@ foreach ($formParts as $inputName => $attr) {
       $html .= '</div>';
     break;
   }
+  $html .= '<input type="hidden" name="'.$inputName.'_label" value="'.$attr['label'].'">';
 }
 $html .= '<input type="submit" id="inputSubmit" class="Form-Btn" value="確認画面へ"></form>';
 
