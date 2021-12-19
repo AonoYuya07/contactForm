@@ -1,0 +1,17 @@
+version: '3'
+services:
+  contactform:
+    image: php:7-apache
+    restart: always
+    container_name: contactform
+    expose:
+      - '80'
+    environment:
+      VIRTUAL_HOST: contactform
+    volumes:
+      - .:/var/www/html
+
+networks:
+  default:
+    external:
+      name: develop

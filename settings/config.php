@@ -17,6 +17,7 @@ $formParts = array(
     "class" => "tel",
     "id" => "tel",
     "errBoxId" => "telErr",
+    "label" => "電話番号",
     "require" => true
   ),
   //メールアドレス
@@ -84,9 +85,9 @@ foreach ($formParts as $inputName => $attr) {
       $html .= '<select class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'">';
       foreach ($attr['options'] as $value) {
         if (!empty($_SESSION[$inputName]) && $_SESSION[$inputName] == $value) {
-          $html .= '<option value="'.$value.'" selected></option>';
+          $html .= '<option value="'.$value.'" selected>'.$value.'</option>';
         }else {
-          $html .= '<option value="'.$value.'"></option>';
+          $html .= '<option value="'.$value.'">'.$value.'</option>';
         }
       }
       $html .= '<select>';
@@ -95,7 +96,7 @@ foreach ($formParts as $inputName => $attr) {
 
     case 'radio':
       //ラジオボタンの場合
-      $html = '<div class="Form-Item">';
+      $html .= '<div class="Form-Item">';
       if ($attr['label']) {
         $html .= '<p class="Form-Item-Label"><span class="Form-Item-Label-Required">必須</span>'.$attr['label'].'</p>';
       }else {
@@ -103,9 +104,9 @@ foreach ($formParts as $inputName => $attr) {
       }
       foreach ($attr['options'] as $value) {
         if (!empty($_SESSION[$inputName]) && $_SESSION[$inputName] == $value) {
-          $html .= '<input type="radio" name="'.$inputName.'" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'" checked>';
+          $html .= '<input type="radio" name="'.$inputName.'" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'" checked>'.$value;
         }else {
-          $html .= '<input type="radio" name="'.$inputName.'" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">';
+          $html .= '<input type="radio" name="'.$inputName.'" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">'.$value;
         }
       }
       $html .= '</div>';
@@ -113,7 +114,7 @@ foreach ($formParts as $inputName => $attr) {
 
     case 'checkbox':
       //チェックボックスの場合
-      $html = '<div class="Form-Item">';
+      $html .= '<div class="Form-Item">';
       if ($attr['label']) {
         $html .= '<p class="Form-Item-Label"><span class="Form-Item-Label-Required">必須</span>'.$attr['label'].'</p>';
       }else {
@@ -121,35 +122,34 @@ foreach ($formParts as $inputName => $attr) {
       }
       foreach ($attr['options'] as $value) {
         if (!empty($_SESSION[$inputName]) && $_SESSION[$inputName] == $value) {
-          $html .= '<input type="checkbox" name="'.$inputName.'[]" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'" checked>';
+          $html .= '<input type="checkbox" name="'.$inputName.'[]" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'" checked>'.$value;
         }else {
-          $html .= '<input type="checkbox" name="'.$inputName.'[]" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">';
+          $html .= '<input type="checkbox" name="'.$inputName.'[]" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">'.$value;
         }
       }
       $html .= '</div>';
     break;
 
     case 'textarea':
-      //セレクトボックスの場合
-      $html = '<div class="Form-Item">';
+      //テキストエリアの場合
+      $html .= '<div class="Form-Item">';
       if ($attr['label']) {
         $html .= '<p class="Form-Item-Label"><span class="Form-Item-Label-Required">必須</span>'.$attr['label'].'</p>';
       }else {
         $html .= '<p class="Form-Item-Label">'.$attr['label'].'</p>';
       }
-      foreach ($attr['options'] as $value) {
-        if (!empty($_SESSION[$inputName])) {
-          $html .= '<textarea class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'">'.$_SESSION[$inputName].'</textarea>';
-        }else {
-          $html .= '<textarea class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'"></textarea>';
-        }
+      if (!empty($_SESSION[$inputName])) {
+        $html .= '<textarea class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'">'.$_SESSION[$inputName].'</textarea>';
+      }else {
+        $html .= '<textarea class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'"></textarea>';
       }
+
       $html .= '</div>';
     break;
 
     default:
       //textやdate,email,telなどその他
-      $html = '<div class="Form-Item">';
+      $html .= '<div class="Form-Item">';
       if ($attr['label']) {
         $html .= '<p class="Form-Item-Label"><span class="Form-Item-Label-Required">必須</span>'.$attr['label'].'</p>';
       }else {
@@ -163,6 +163,7 @@ foreach ($formParts as $inputName => $attr) {
       $html .= '</div>';
     break;
   }
-  $html .= '<input type="submit" class="Form-Btn" value="確認画面へ"></form>';
 }
+$html .= '<input type="submit" class="Form-Btn" value="確認画面へ"></form>';
+
 ?>
