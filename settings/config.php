@@ -111,8 +111,7 @@ $sameLabel = array(
   ),
 );
 //formタグ内のHTMLを生成する
-$inputArr = array();//生成したHTMLを入れる箱
-$html = '<form class="form" form="form1" action="confirm.php" method="post">';
+$html = '<form class="form" form="form1" action="'.$confirmUrl.'" method="post">';
 foreach ($formParts as $inputName => $attr) {
   //全inputパーツで共通のHTMLタグもinputタグの種別ごとの設定を想定しておく。
   switch ($attr['type']) {
