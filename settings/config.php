@@ -1,6 +1,9 @@
 <?php
+session_start();
+
 //お問い合わせ設定。設置するフォームの項目設定やinputタグのHTML生成を行う。
 //URL定義。確認画面＆完了画面のURLを定義する
+$inputUrl = "/index.php";
 $confirmUrl = "/confirm.php";
 $thanksUrl = "/thanks.php";
 //管理者メールアドレス
@@ -19,15 +22,23 @@ $adminMail = "test@example.com";
 -------------------------------------*/
 $formParts = array(
   //氏名
-  "name" => array(
+  "name1" => array(
     "type" => "text",
-    "class" => "name",
-    "id" => "name",
-    "errBoxId" => "nameErr",
-    "label" => "氏名",
-    "require" => true,
+    "class" => "name1",
+    "id" => "name1",
+    "errBoxId" => "name1Err",
+    "label" => "姓",
+    "require" => true, //HTMLに設置する「必須ラベル」のOn/Off
     "validate" => "require",
-    "validateTarget" => "name"
+  ),
+  "name2" => array(
+    "type" => "text",
+    "class" => "name2",
+    "id" => "name2",
+    "errBoxId" => "name2Err",
+    "label" => "名",
+    "require" => true, //HTMLに設置する「必須ラベル」のOn/Off
+    "validate" => "require",
   ),
   //電話番号
   "tel" => array(
@@ -38,7 +49,6 @@ $formParts = array(
     "label" => "電話番号",
     "require" => true,
     "validate" => "require,telFormat",
-    "validateTarget" => "tel"
   ),
   //メールアドレス
   "email" => array(
@@ -49,7 +59,6 @@ $formParts = array(
     "label" => "メールアドレス",
     "require" => true,
     "validate" => "require,emailFormat",
-    "validateTarget" => "email"
   ),
   //問い合わせ種別
   "contactType" => array(
@@ -65,7 +74,6 @@ $formParts = array(
     "label" => "問い合わせ種別",
     "require" => true,
     "validate" => "radioRequire",
-    "validateTarget" => "contactType"
   ),
   //当サイトを知ったきっかけ
   "knowReason" => array(
@@ -83,7 +91,6 @@ $formParts = array(
     "label" => "当サイトを知ったきっかけ",
     "require" => false,
     "validate" => "selectRequire",
-    "validateTarget" => "knowReason"
   ),
   //備考
   "remarks" => array(
@@ -94,21 +101,11 @@ $formParts = array(
     "label" => "備考",
     "require" => false,
     "validate" => "require,japanese",
-    "validateTarget" => "remarks"
   ),
 );
 //メール文面で同じラベルで表示させる項目を定義(設計中)
 $sameLabel = array(
-  "set1" => array(
-    "zip",
-    "pref",
-    "address",
-    "building"
-  ),
-  "set2" => array(
-    "name1",
-    "name2"
-  ),
+  "name1,name2",
 );
 //formタグ内のHTMLを生成する
 $html = '<form class="form" form="form1" action="'.$confirmUrl.'" method="post">';
@@ -141,7 +138,7 @@ foreach ($formParts as $inputName => $attr) {
         }
       }
       $html .= '<select>';
-      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['validateTarget'].'"></p>';
+      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['id'].'"></p>';
       $html .= '</div>';
     break;
 
@@ -160,7 +157,7 @@ foreach ($formParts as $inputName => $attr) {
           $html .= '<input type="radio" name="'.$inputName.'" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">'.$value;
         }
       }
-      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['validateTarget'].'"></p>';
+      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['id'].'"></p>';
       $html .= '</div>';
     break;
 
@@ -179,7 +176,7 @@ foreach ($formParts as $inputName => $attr) {
           $html .= '<input type="checkbox" name="'.$inputName.'[]" value="'.$value.'" class="'.$attr['class'].'" id="'.$attr['id'].'">'.$value;
         }
       }
-      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['validateTarget'].'"></p>';
+      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['id'].'"></p>';
       $html .= '</div>';
     break;
 
@@ -196,7 +193,7 @@ foreach ($formParts as $inputName => $attr) {
       }else {
         $html .= '<textarea class="'.$attr['class'].'" id="'.$attr['id'].'" name="'.$inputName.'"></textarea>';
       }
-      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['validateTarget'].'"></p>';
+      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['id'].'"></p>';
       $html .= '</div>';
     break;
 
@@ -213,12 +210,60 @@ foreach ($formParts as $inputName => $attr) {
       }else {
         $html .= '<input type="'.$attr['type'].'" name="'.$inputName.'" value="" class="'.$attr['class'].'" id="'.$attr['id'].'">';
       }
-      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['validateTarget'].'"></p>';
+      $html .= '<p id="'.$attr['errBoxId'].'" class="getId" data-validate="'.$attr['validate'].'" data-target="'.$attr['id'].'"></p>';
       $html .= '</div>';
     break;
   }
   $html .= '<input type="hidden" name="'.$inputName.'_label" value="'.$attr['label'].'">';
+  foreach ($sameLabel as $k => $sl) {
+    $html .= '<input type="hidden" name="same_value_'.$k.'" value="'.$sl.'">';
+  }
+  $html .= '<input type="hidden" name="same_value_count" value="'.count($sameLabel).'">';
+  $html .= '<input type="hidden" name="flg" value="true">';
 }
 $html .= '<input type="submit" id="inputSubmit" class="Form-Btn" value="確認画面へ"></form>';
 
+
+/*-------------------------------------------------------------------------------
+//確認画面設定
+-------------------------------------------------------------------------------*/
+if ($_SERVER['REQUEST_URI'] == $confirmUrl) {
+  //フラグがない場合は入力画面へ遷移させる
+  if ($_POST['flg'] != true){
+    header('Location: '.$inputUrl);
+    exit;
+  }
+  //セッション保持
+  $_SESSION = $_POST;
+
+  //ラベルと＄_POSTの紐付け設定
+  foreach ($formParts as $inputName => $attr) {
+    $postParam[$_POST[$inputName]] = $attr['label'];
+  }
+
+  //値保持
+  $confirmHTML = '<form class="form" form="form1" action="'.$thanksUrl.'" method="post">';
+  foreach ($_POST as $key => $value){
+    if (is_array($value)){
+      foreach ($value as $key1 => $value1){
+        if (strpos($key, "same_value") === false && strpos($key, "flg") === false && strpos($key, "inputSubmit") === false && strpos($key, "label") === false) {
+          $confirmHTML .= '<div class="Form-Item">';
+          $confirmHTML .= '<p class="Form-Item-Label">'.$postParam[$value1].'</p>';
+          $confirmHTML .= '<p class="value">'.$value1.'</p>';
+          $confirmHTML .= '</div>';
+        }
+        $confirmHTML .= '<input type="hidden" name="'.$key[$key1].'" value="'.$value1.'">';
+      }
+    }else{
+      if (strpos($key, "same_value") === false && strpos($key, "flg") === false && strpos($key, "inputSubmit") === false && strpos($key, "label") === false) {
+        $confirmHTML .= '<div class="Form-Item">';
+        $confirmHTML .= '<p class="Form-Item-Label">'.$postParam[$value].'</p>';
+        $confirmHTML .= '<p class="value">'.$value.'</p>';
+        $confirmHTML .= '</div>';
+      }
+      $confirmHTML .= '<input type="hidden" name="'.$key.'" value="'.$value.'">';
+    }
+  }
+  $confirmHTML .= '<input type="submit" id="inputSubmit" class="Form-Btn" value="確認画面へ"></form>';
+}
 ?>
