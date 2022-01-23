@@ -8,6 +8,7 @@ $confirmUrl = "/confirm.php";
 $thanksUrl = "/thanks.php";
 //管理者メールアドレス
 $adminMail = "test@example.com";
+$home_url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
 /*************入力画面HTML生成*************/
 //classやidは各項目の個別のCSS＆JS適用に使用する想定
 /*想定バリデーション-------------------------
@@ -105,7 +106,7 @@ $formParts = array(
 );
 //メール文面で同じラベルで表示させる項目を定義(設計中)
 $sameLabel = array(
-  "name1,name2",
+  "name1,name2" => "お名前",
 );
 //formタグ内のHTMLを生成する
 $html = '<form class="form" form="form1" action="'.$confirmUrl.'" method="post">';
@@ -215,8 +216,10 @@ foreach ($formParts as $inputName => $attr) {
     break;
   }
   $html .= '<input type="hidden" name="'.$inputName.'_label" value="'.$attr['label'].'">';
+  $cnt = 0;
   foreach ($sameLabel as $k => $sl) {
-    $html .= '<input type="hidden" name="same_value_'.$k.'" value="'.$sl.'">';
+    $html .= '<input type="hidden" name="same_value_'.$cnt.'" value="'.$k."___".$sl.'">';
+    $cnt++;
   }
   $html .= '<input type="hidden" name="same_value_count" value="'.count($sameLabel).'">';
   $html .= '<input type="hidden" name="flg" value="true">';
@@ -264,6 +267,7 @@ if ($_SERVER['REQUEST_URI'] == $confirmUrl) {
       $confirmHTML .= '<input type="hidden" name="'.$key.'" value="'.$value.'">';
     }
   }
-  $confirmHTML .= '<input type="submit" id="inputSubmit" class="Form-Btn" value="確認画面へ"></form>';
+  $confirmHTML .= '<input type="submit" id="inputSubmit" class="Form-Btn" value="送信"></form>';
+  $confirmHTML .= '<input value="前に戻る" onclick="history.back();" type="button" class="Form-Btn">';
 }
 ?>
