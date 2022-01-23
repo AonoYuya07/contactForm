@@ -20,7 +20,6 @@ $subject = array( //件名
   "お問い合わせありがとうございます！"
 );
 
-// var_dump($formParts);exit;
 /*-------------------------------------------------------
 //本文の作成
 -------------------------------------------------------*/
@@ -73,9 +72,6 @@ $userIntroduction = "この度はお問い合わせいただきありがとう�
 
 $adminMailBody = makeBody($adminIntroduction,$formParts);
 $userMailBody = makeBody($userIntroduction,$formParts);
-// echo "<pre>";
-// var_dump($adminMailBody);exit;
-// echo "</pre>";
 //作成した本文を配列へ
 $message = array(
   $adminMailBody,//管理者あての本文
@@ -100,12 +96,7 @@ $mail = new PHPMailer(true);
 try {
     // SMTPの設定
     $mail->isSMTP();                       // SMTP 利用
-    // $mail->Host       = 'smtp.gmail.com';  // SMTP サーバー(Gmail の場合これ)
-    // $mail->SMTPAuth   = true;              // SMTP認証を有効にする
-    // $mail->Username   = 'XXXXX@gmail.com'; // ユーザ名 (Gmail ならメールアドレス)
-    // $mail->Password   = 'xxxxxxxxxx';      // パスワード
     // $mail->SMTPSecure = 'tls';             // 暗号化通信 (Gmail では使えます)
-    // $mail->Port       = 587;               // TCP ポート (TLS の場合 587)
     $mail->Host = 'smtp.mailtrap.io';
     $mail->SMTPAuth = true;
     $mail->Port = 2525;
@@ -119,7 +110,6 @@ try {
       $mail->setFrom('yaruo.aa.91@gmail.com', '問い合わせ開発');  // 送信元メールアドレスと名前
       $mail->addAddress($to[$i]);  // 送信先メールアドレスと名前
       $mail->Subject = mb_encode_mimeheader($subject[$i], 'ISO-2022-JP');  // 件名
-      // $mail->Body    = mb_convert_encoding($message[$i], "JIS","UTF-8");  // 本文
       $mail->Body    = $message[$i];  // 本文
 
       // 送信

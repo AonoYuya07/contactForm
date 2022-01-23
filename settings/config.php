@@ -3,12 +3,12 @@ session_start();
 
 //お問い合わせ設定。設置するフォームの項目設定やinputタグのHTML生成を行う。
 //URL定義。確認画面＆完了画面のURLを定義する
+$home_url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
 $inputUrl = "/index.php";
 $confirmUrl = "/confirm.php";
 $thanksUrl = "/thanks.php";
 //管理者メールアドレス
 $adminMail = "test@example.com";
-$home_url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
 /*************入力画面HTML生成*************/
 //classやidは各項目の個別のCSS＆JS適用に使用する想定
 /*想定バリデーション-------------------------
@@ -24,13 +24,13 @@ $home_url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP
 $formParts = array(
   //氏名
   "name1" => array(
-    "type" => "text",
-    "class" => "name1",
-    "id" => "name1",
-    "errBoxId" => "name1Err",
-    "label" => "姓",
+    "type" => "text", //inputType
+    "class" => "name1", //class名
+    "id" => "name1", //id名
+    "errBoxId" => "name1Err",  //エラーメッセージを表示する要素のID。inputのname属性＋Err
+    "label" => "姓", //フォームラベル
     "require" => true, //HTMLに設置する「必須ラベル」のOn/Off
-    "validate" => "require",
+    "validate" => "require", //バリデーションの種類
   ),
   "name2" => array(
     "type" => "text",
@@ -38,7 +38,7 @@ $formParts = array(
     "id" => "name2",
     "errBoxId" => "name2Err",
     "label" => "名",
-    "require" => true, //HTMLに設置する「必須ラベル」のOn/Off
+    "require" => true, 
     "validate" => "require",
   ),
   //電話番号
